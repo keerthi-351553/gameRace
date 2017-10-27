@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>HexGL by BKcore</title>
+  <meta charset="utf-8">
+  <meta name="description" content="HexGL is a futuristic racing game built by Thibaut Despoulain (BKcore) using HTML5, Javascript and WebGL. Come challenge your friends on this fast-paced 3D game!">
+  <meta property="og:title" content="HexGL, the HTML5 futuristic racing game." />
+  <meta property="og:type" content="game" />
+  <meta property="og:url" content="http://hexgl.bkcore.com/" />
+  <meta property="og:image" content="http://hexgl.bkcore.com/image.png" />
+  <meta property="og:site_name" content="HexGL by BKcore" />
+  <meta property="fb:admins" content="1482017639" />
+  <link rel="icon" href="http://hexgl.bkcore.com/favicon.png" type="image/png">
+  <link rel="shortcut icon" href="http://hexgl.bkcore.com/favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="css/multi.css" type="text/css" charset="utf-8">
+  <link rel="stylesheet" href="css/fonts.css" type="text/css" charset="utf-8">
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      padding: 0;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    canvas {
+      pointer-events: none;
+      width: 100%;
+    }
+
+    #overlay {
+      position: absolute;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    #explanation {
+      font-size: 12px;
+      position: absolute;
+      word-wrap: break-word;
+    }
+
+    #scoree {
+      position: absolute;
+      font-size: 75px;
+      margin-top: 1%;
+      margin-left: 5%;
+      color: white;
+    }
+
+    @media only screen and (max-width:767px) {
+      #intro2 {
+        font-size: 16px;
+        position: absolute;
+        text-align: center;
+        z-index: 9999;
+        margin: 0 auto 0 auto;
+        color: #ffffff;
+        min-height: 10em;
+        display: table-cell;
+        vertical-align: center;
+        margin-top: -157%;
+        height: 80% !important;
+        width: 75% !important;
+        margin-left: 10%;
+        margin-right: 10%;
+        padding-left: 3%;
+        padding-right: 3%;
+      }
+    }
+
+    @media only screen and (min-width:768px) and (max-width:1224px) {
+      #intro2 {
+        font-size: 20px;
+        position: absolute;
+        text-align: center;
+        z-index: 9999;
+        margin: 0 auto 0 auto;
+        color: #ffffff;
+        min-height: 10em;
+        display: table-cell;
+        vertical-align: center;
+        margin-top: -123% !important;
+        width: 50% !important;
+        height: 80% !important;
+        margin-left: 20%;
+        margin-right: 25%;
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+    }
+
+    @media only screen and (min-width:1225px) {
+      #intro2 {
+        font-size: 20px;
+        position: absolute;
+        text-align: center;
+        z-index: 9999;
+        margin: 0 auto 0 auto;
+        color: #ffffff;
+        min-height: 10em;
+        display: table-cell;
+        vertical-align: center;
+        margin-top: -42% !important;
+        width: 50% !important;
+        height: 65% !important;
+        margin-left: 25%;
+        margin-right: 25%;
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+    }
+
+    #emp {
+      height: 30px;
+    }
+  </style>
+  <script src="jquery-1.7.2.min.js"></script>
+  <script type="text/javascript">
+  </script>
+  <script src="dataset2.js"></script>
+</head>
+
+<body>
+  <div id="step-1">
+    <div id="global"></div>
+    <div id="title">
+    </div>
+    <div id="menucontainer">
+      <div id="menu">
+        Enter your Employee ID:<br>
+        <div class="search-wrapper">
+          <form>
+            <input id="emp" type="text" name="focus" required class="search-box" placeholder="Enter employee ID.Then click START" style="width:50%" onkeypress="return IsNumeric(event);"/>
+          </form>
+        </div>
+        <div id="start" style="display:none">Start</div>
+        <div id="s-controlType">Controls: Keyboard</div>
+        <div id="s-quality">Quality: High</div>
+        <div id="s-hud">HUD: On</div>
+        <div id="s-godmode" style="display: none">Godmode: Off</div>
+        <div id="s-credits">Credits</div>
+      </div>
+      <span id="error" style="color: Red; display: none">* Input digits (0 - 9)</span>
+    </div>
+  </div>
+  <div id="step-2" style="display: none">
+    <div id="ctrl-help">Click/Touch to continue.</div>
+  </div>
+  <div id="step-3" style="display: none">
+    <div id="progressbar"></div>
+  </div>
+  <div id="step-4" style="display: none">
+    <div id="overlay">
+      <div id="scoree">Score:<span id="score">00</span></div>
+    </div>
+    <div id="main"></div>
+  </div>
+  <div id="step-5" style="display: none;background-image: url(images/woodpanel.jpg);background-repeat: no-repeat;
+    width: 100% !important;background-size:cover;">
+    Time taken:
+   <div></div><br/>
+   <div>Emp Id</div>
+   <div id="name1" style="font-size:30px"></div><br/>
+   <div>
+     <div>Score</div>
+     <div id="score2" style="font-size:30px">00</div>
+   </div><br/>
+ <br/>
+      <div id="ctrl-help">Click/Touch to continue.</div>
+    </div>
+  <div id="credits" style="display: none">
+    <h3>Code</h3>
+    <p><b>Concept and Development</b><br>Thibaut Despoulain (BKcore)</p>
+    <p><b>Contributors</b><br>townxelliot<br>mahesh.kk</p>
+    <p><b>Technologies</b><br>WebGL<br>JavaScript<br>CoffeeScript<br>Three.js<br>LeapMotion</p>
+    <h3>Graphics</h3>
+    <p><b>HexMKI base model</b><br>Charnel</p>
+    <p><b>Track texture</b><br>Nobiax</p>
+    <h4>Click anywhere to continue.</h4>
+  </div>
+  <div id="leapinfo" style="display: none"></div>
+
+  <div style="background-image: url(images/woodpanel.jpg); height: 640px; width: 512px;vertical-align: middle;display:none" id="intro2">
+    <br><br>
+    <table>
+      <tr>
+        <td align="left"><span id="QID">Question</span> </td>
+      </tr>
+      <tr>
+        <td align="left"><input type="radio" value="1" name="ANS" id="ans1" onclick="getbutton()"><span id="CID1">C1</span></td>
+      </tr>
+      <tr>
+        <td align="left"><input type="radio" value="2" name="ANS" id="ans2" onclick="getbutton()"><span id="CID2">C2</span></td>
+      </tr>
+      <tr>
+        <td align="left"><input type="radio" value="3" name="ANS" id="ans3" onclick="getbutton()"><span id="CID3">C3</span></td>
+      </tr>
+      <tr>
+        <td align="left"><input type="radio" value="4" name="ANS" id="ans4" onclick="getbutton()"><span id="CID4">C4</span></td>
+      </tr>
+      <tr>
+        <td align="left"><input type="button" onclick="start();" id="submit" value="Submit" /></td>
+      </tr>
+
+      <div id="explanation">
+        <br/><br/>
+        <table style="float:left;margin-top:2%;display:none;" id="exptable">
+          <tr>
+            <td align="left">You have chosen the <span id="AID">  </span> Answer !!!</td>
+          </tr>
+          <tr>
+            <td align="left">The Right Answer is <span id="EID"></span> </td>
+          </tr>
+          <tr>
+            <td align="left"><input type="button" onclick="disappear();" value="OK" /></td>
+          </tr>
+        </table>
+        <table style="float:left;display:none;" id="rightexptable">
+          <tr>
+            <td align="left">You have chosen the <span id="ANID">  </span> Answer !!!</td>
+          </tr>
+          <tr>
+            <td align="left"><input type="button" onclick="disappear();" value="OK" /></td>
+          </tr>
+        </table>
+      </div>
+      <script>
+
+        function IsNumeric(e) {
+          var specialKeys = new Array();
+      specialKeys.push(8);
+          console.log("inside",e);
+            var keyCode = e.which ? e.which : e.keyCode
+            var ret = (((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1)||(e.keyCode == 13));
+            document.getElementById("error").style.display = ret ?  "none": alert("Sorry! Enter numbers only");
+            var name = document.getElementById("emp").value;
+              if (name.length > 4) {
+                $('#start').css('display', 'block');
+              }
+            return ret;
+        }
+        document.getElementById("submit").style.visibility = "hidden";
+
+        function getbutton() {
+          document.getElementById("submit").style.visibility = "visible";
+        };
+
+        $("#body").css("left", (screen.width / 2) - 256);
+      </script>
+      <script src="libs/leap-0.4.1.min.js"></script>
+      <script src="libs/Three.dev.js"></script>
+      <script src="libs/ShaderExtras.js"></script>
+      <script src="libs/postprocessing/EffectComposer.js"></script>
+      <script src="libs/postprocessing/RenderPass.js"></script>
+      <script src="libs/postprocessing/BloomPass.js"></script>
+      <script src="libs/postprocessing/ShaderPass.js"></script>
+      <script src="libs/postprocessing/MaskPass.js"></script>
+      <script src="libs/Detector.js"></script>
+      <script src="libs/Stats.js"></script>
+      <script src="libs/DAT.GUI.min.js"></script>
+
+      <script src="bkcore.coffee/controllers/TouchController.js"></script>
+      <script src="bkcore.coffee/controllers/OrientationController.js"></script>
+      <script src="bkcore.coffee/controllers/GamepadController.js"></script>
+
+      <script src="bkcore.coffee/Timer.js"></script>
+      <script src="bkcore.coffee/ImageData.js"></script>
+      <script src="bkcore.coffee/Utils.js"></script>
+
+      <script src="bkcore/threejs/RenderManager.js"></script>
+      <script src="bkcore/threejs/Shaders.js"></script>
+      <script src="bkcore/threejs/Particles.js"></script>
+      <script src="bkcore/threejs/Loader.js"></script>
+
+      <script src="bkcore/Audio.js"></script>
+
+      <script src="bkcore/hexgl/HUD.js"></script>
+      <script src="bkcore/hexgl/RaceData.js"></script>
+      <script src="bkcore/hexgl/ShipControls.js"></script>
+      <script src="bkcore/hexgl/ShipEffects.js"></script>
+      <script src="bkcore/hexgl/CameraChase.js"></script>
+      <script src="bkcore/hexgl/Gameplay.js"></script>
+      <script src="bkcore/hexgl/tracks/Cityscape.js"></script>
+      <script src="bkcore/hexgl/HexGL.js"></script>
+      <script src="launch.js"></script>
+</body>
+
+</html>
